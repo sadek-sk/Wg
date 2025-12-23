@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Word & Translation</title>
+<style>
+  body {
+    font-family: "Cairo", Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+    color: white;
+    direction: rtl;
+  }
+
+  h1, h2 {
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
+  }
+
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  #start-screen {
+    display: flex;
+    background: linear-gradient(to bottom, #11998e, #38ef7d);
+  }
+
+  #game-screen, #end-screen, #wallet-screen {
+    flex-direction: column;
+    padding: 30px;
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  #input-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+
+  .input-box {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+    text-align: center;
+    border: 2px solid white;
+    background: rgba(255,255,255,0.1);
+    color: white;
+    margin: 5px;
+    border-radius: 10px;
+    transition: all 0.3s;
+    text-transform: lowercase;
+    direction: ltr;
+  }
+
+  .input-box.correct { background: #4caf50; border-color: #4caf50; }
+  .input-box.wrong { background: #f44336; border-color: #f44336; }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  button {
+    padding: 12px 22px;
+    font-size: 18px;
+    border: none;
+    border-radius: 8px;
+    background: #ff9800;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+  }
+
+  button:hover {
+    background: #e68900;
+    transform: scale(1.05);
+  }
+
+  #progress-text { color: #ffd54f; margin-top: 5px; font-size: 20px; }
+  #correct-word { margin-top: 20px; font-size: 22px; color: #4caf50; font-weight: bold; }
+
+  #wallet-list {
+    margin-top: 20px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 15px;
+    width: 80%;
+    max-width: 400px;
+    text-align: right;
+  }
+
+  #wallet-list p {
+    margin: 5px 0;
+    font-size: 18px;
+  }
+
+  /* Support Bubble */
+  .support-bubble {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin: 20px auto 0;
+    max-width: 300px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  .support-bubble p {
+    margin: 0 0 10px;
+    font-size: 16px;
+  }
+
+  .support-bubble a {
+    display: inline-block;
+    background: #ff9800;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .support-bubble a:hover {
+    background: #e68900;
+    transform: scale(1.05);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .input-box { width: 40px; height: 40px; font-size: 20px; }
+    button { font-size: 16px; padding: 10px 20px; }
+    .support-bubble a { font-size: 16px; padding: 10px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Start Screen -->
+<div id="start-screen" class="screen">
+  <h1>Word & Translation</h1>
+  <p>Learn Arabic words by translating from English interactively</p>
+  <div class="button-container">
+    <button onclick="startGame()">🎮 Start Game</button>
+    <button onclick="showWallet()">📚 View Wallet</button>
+  </div>
+
+  <!-- Support Bubble -->
+  <div class="support-bubble">
+    <p>.Support us to keep providing more</p>
+    <a href="https://www.paypal.com/qrcodes/p2pqrc/8F723UNEU3QHW" target="_blank"> PayPal</a>
+  </div>
+</div>
+
+<!-- Game Screen -->
+<div id="game-screen" class="screen">
+  <h2 id="word"></h2>
+  <div id="input-container"></div>
+  <div id="progress-text"></div>
+  <div id="correct-word"></div>
+  <div class="button-container">
+    <button onclick="checkWord()">Check</button>
+    <button onclick="showHint()">💡 Hint</button>
+    <button onclick="nextWord()">⏭️ Skip</button>
+    <button onclick="restartGame()">🏠 Home</button>
+  </div>
+</div>
+
+<!-- End Screen -->
+<div id="end-screen" class="screen">
+  <h1>🏁You’ve finished the game 🏁</h1>
+  <div class="button-container">
+    <button onclick="showWallet()">📚 View Wallet</button>
+    <button onclick="restartGame()">🏠 Back to Home</button>
+  </div>
+
+  <!-- Support Bubble -->
+  <div class="support-bubble">
+    <p>.Support us to keep providing more</p>
+    <a href="https://www.paypal.com/qrcodes/p2pqrc/8F723UNEU3QHW" target="_blank"> PayPal</a>
+  </div>
+</div>
+
+<!-- Wallet Screen -->
+<div id="wallet-screen" class="screen">
+  <h1>📚 Wallet</h1>
+  <div id="wallet-list"></div>
+  <div class="button-container">
+    <button onclick="restartGame()">🏠 Back to Home</button>
+  </div>
+</div>
+
+<script>
+const words = [
+  { english: "sun", arabic: "شمس" },
+  { english: "moon", arabic: "قمر" },
+  { english: "water", arabic: "ماء" },
+  { english: "sky", arabic: "سماء" },
+  { english: "tree", arabic: "شجرة" },
+  { english: "flower", arabic: "زهرة" },
+  { english: "car", arabic: "سيارة" },
+  { english: "book", arabic: "كتاب" },
+  { english: "city", arabic: "مدينة" },
+  { english: "heart", arabic: "قلب" },
+  { english: "river", arabic: "نهر" },
+  { english: "ball", arabic: "كرة" },
+  { english: "door", arabic: "باب" },
+  { english: "hand", arabic: "يد" },
+  { english: "eye", arabic: "عين" },
+  { english: "star", arabic: "نجم" },
+  { english: "pen", arabic: "قلم" },
+  { english: "clock", arabic: "ساعة" },
+  { english: "apple", arabic: "تفاحة" },
+  { english: "key", arabic: "مفتاح" },
+  { english: "house", arabic: "بيت" },
+  { english: "road", arabic: "طريق" },
+  { english: "school", arabic: "مدرسة" },
+  { english: "teacher", arabic: "معلم" },
+  { english: "student", arabic: "طالب" },
+  { english: "computer", arabic: "حاسوب" },
+  { english: "table", arabic: "طاولة" },
+  { english: "window", arabic: "نافذة" },
+  { english: "bread", arabic: "خبز" },
+  { english: "milk", arabic: "حليب" },
+  { english: "fish", arabic: "سمك" },
+  { english: "bird", arabic: "طائر" },
+  { english: "dog", arabic: "كلب" },
+  { english: "cat", arabic: "قط" },
+  { english: "horse", arabic: "حصان" },
+  { english: "mountain", arabic: "جبل" },
+  { english: "sea", arabic: "بحر" },
+  { english: "sand", arabic: "رمل" },
+  { english: "rain", arabic: "مطر" },
+  { english: "snow", arabic: "ثلج" },
+  { english: "fire", arabic: "نار" },
+  { english: "door", arabic: "باب" },
+  { english: "family", arabic: "عائلة" },
+  { english: "friend", arabic: "صديق" },
+  { english: "food", arabic: "طعام" },
+];
+
+let currentIndex = 0;
+let wallet = JSON.parse(localStorage.getItem("wallet")) || [];
+
+const startScreen = document.getElementById("start-screen");
+const gameScreen = document.getElementById("game-screen");
+const endScreen = document.getElementById("end-screen");
+const walletScreen = document.getElementById("wallet-screen");
+const wordElement = document.getElementById("word");
+const inputContainer = document.getElementById("input-container");
+const progressText = document.getElementById("progress-text");
+const correctWordElement = document.getElementById("correct-word");
+const walletList = document.getElementById("wallet-list");
+
+function showScreen(screen) {
+  [startScreen, gameScreen, endScreen, walletScreen].forEach(s => s.style.display = "none");
+  screen.style.display = "flex";
+}
+
+function startGame() {
+  currentIndex = 0;
+  showScreen(gameScreen);
+  loadWord();
+}
+
+function loadWord() {
+  if (currentIndex >= words.length) return endGame();
+  const word = words[currentIndex];
+  wordElement.textContent = `Translate: ${word.english}`;
+  inputContainer.innerHTML = "";
+  correctWordElement.textContent = "";
+
+  for (let i = 0; i < word.arabic.length; i++) {
+    const input = document.createElement("input");
+    input.className = "input-box";
+    input.maxLength = 1;
+    input.dataset.index = i;
+    input.addEventListener("input", () => {
+      if (i < word.arabic.length - 1 && input.value)
+        inputContainer.children[i + 1].focus();
+    });
+    input.addEventListener("keydown", e => {
+      const inputs = [...inputContainer.children];
+      const idx = inputs.indexOf(e.target);
+      if (e.key === "Backspace" && !e.target.value && idx > 0)
+        inputs[idx - 1].focus();
+      if (e.key === "Enter") checkWord();
+    });
+    inputContainer.appendChild(input);
+  }
+
+  inputContainer.firstChild.focus();
+  updateProgress();
+}
+
+function checkWord() {
+  const inputs = [...inputContainer.children];
+  const guess = inputs.map(i => i.value).join("");
+  const correct = words[currentIndex].arabic;
+
+  if (guess === correct) {
+    inputs.forEach(i => i.classList.add("correct"));
+    correctWordElement.innerHTML =
+      "✅ <span style='direction: rtl; unicode-bidi: bidi-override;'>" + correct + "</span>";
+    if (!wallet.some(w => w.english === words[currentIndex].english)) {
+      wallet.push(words[currentIndex]);
+      localStorage.setItem("wallet", JSON.stringify(wallet));
+    }
+    setTimeout(nextWord, 1000);
+  } else {
+    inputs.forEach((i, idx) => {
+      if (i.value !== correct[idx]) {
+        i.classList.add("wrong");
+        i.value = "";
+      }
+    });
+    setTimeout(() => inputs.forEach(i => i.classList.remove("wrong")), 600);
+    inputContainer.firstChild.focus();
+  }
+}
+
+function showHint() {
+  const word = words[currentIndex].arabic;
+  const emptyInputs = [...inputContainer.children].filter(i => !i.value);
+  if (emptyInputs.length > 0) {
+    const randomInput = emptyInputs[Math.floor(Math.random() * emptyInputs.length)];
+    const idx = randomInput.dataset.index;
+    randomInput.value = word[idx];
+    randomInput.classList.add("correct");
+  }
+}
+
+function nextWord() {
+  currentIndex++;
+  loadWord();
+}
+
+function updateProgress() {
+  progressText.textContent = `Word ${currentIndex + 1} of ${words.length}`;
+}
+
+function endGame() {
+  showScreen(endScreen);
+}
+
+function showWallet() {
+  showScreen(walletScreen);
+  walletList.innerHTML = "";
+  if (wallet.length === 0) {
+    walletList.innerHTML = "<p>No saved words yet 🎒</p>";
+  } else {
+    wallet.forEach(w => {
+      const p = document.createElement("p");
+      p.innerHTML = `🔹 ${w.english} = <span style='direction: rtl; unicode-bidi: bidi-override;'>${w.arabic}</span>`;
+      walletList.appendChild(p);
+    });
+  }
+}
+
+function restartGame() {
+  showScreen(startScreen);
+}
+</script>
+</body>
+</html>
