@@ -1,380 +1,236 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>Word & Translation</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101827">
+<meta name="description" content="لعبة الكلمة الصحيحة — تعلّم الإنجليزية بطريقة ممتعة مع ترجمة عربية ومراجعة للكلمات.">
+<title>لعبة الكلمة الصحيحة | Word & Translation</title>
 <style>
-  body {
-    font-family: "Cairo", Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-    color: white;
-    direction: rtl;
-  }
-
-  h1, h2 {
-    margin-bottom: 15px;
-    text-shadow: 2px 2px 5px rgba(0,0,0,0.4);
-  }
-
-  .screen {
-    display: none;
-    min-height: 100vh;
-    padding: 20px;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-
-  #start-screen {
-    display: flex;
-    background: linear-gradient(to bottom, #11998e, #38ef7d);
-  }
-
-  #game-screen, #end-screen, #wallet-screen {
-    flex-direction: column;
-    padding: 30px;
-    animation: fadeIn 0.8s ease-in-out;
-  }
-
-  #input-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 15px;
-  }
-
-  .input-box {
-    width: 50px;
-    height: 50px;
-    font-size: 22px;
-    text-align: center;
-    border: 2px solid white;
-    background: rgba(255,255,255,0.1);
-    color: white;
-    margin: 5px;
-    border-radius: 10px;
-    transition: all 0.3s;
-    text-transform: lowercase;
-    direction: ltr;
-  }
-
-  .input-box.correct { background: #4caf50; border-color: #4caf50; }
-  .input-box.wrong { background: #f44336; border-color: #f44336; }
-
-  .button-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 20px;
-  }
-
-  button {
-    padding: 12px 22px;
-    font-size: 18px;
-    border: none;
-    border-radius: 8px;
-    background: #ff9800;
-    color: white;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s;
-  }
-
-  button:hover {
-    background: #e68900;
-    transform: scale(1.05);
-  }
-
-  #progress-text { color: #ffd54f; margin-top: 5px; font-size: 20px; }
-  #correct-word { margin-top: 20px; font-size: 22px; color: #4caf50; font-weight: bold; }
-
-  #wallet-list {
-    margin-top: 20px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-    padding: 15px;
-    width: 80%;
-    max-width: 400px;
-    text-align: right;
-  }
-
-  #wallet-list p {
-    margin: 5px 0;
-    font-size: 18px;
-  }
-
-  /* Support Bubble */
-  .support-bubble {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 15px 20px;
-    margin: 20px auto 0;
-    max-width: 300px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-  }
-
-  .support-bubble p {
-    margin: 0 0 10px;
-    font-size: 16px;
-  }
-
-  .support-bubble a {
-    display: inline-block;
-    background: #ff9800;
-    color: white;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background 0.3s, transform 0.2s;
-  }
-
-  .support-bubble a:hover {
-    background: #e68900;
-    transform: scale(1.05);
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @media (max-width: 600px) {
-    .input-box { width: 40px; height: 40px; font-size: 20px; }
-    button { font-size: 16px; padding: 10px 20px; }
-    .support-bubble a { font-size: 16px; padding: 10px 16px; }
-  }
+:root{color-scheme:dark;--bg:#0b1020;--panel:#121b2e;--panel2:#18243b;--text:#f4f7ff;--muted:#a8b4cc;--line:#2a3956;--accent:#8b7cff;--accent2:#38d9c5;--good:#45d69a;--bad:#ff6b7b;--gold:#ffd166}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 450px at 10% -10%,#29336a 0%,transparent 60%),radial-gradient(700px 400px at 100% 0%,#124b59 0%,transparent 55%),var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;color:var(--text);padding:18px 14px 32px}
+button,input,select{font:inherit}button{cursor:pointer;border:0;transition:transform .15s,filter .15s}button:active{transform:scale(.98)}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent2);outline-offset:3px}
+.app{max-width:760px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:16px;background:linear-gradient(135deg,var(--accent),#4ba7ff);display:grid;place-items:center;font-size:24px;box-shadow:0 8px 24px #6659ff40}.brand h1{font-size:clamp(19px,4vw,25px);margin:0}.brand p{color:var(--muted);font-size:12px;margin:3px 0 0}.icon-btn{width:42px;height:42px;border:1px solid var(--line);border-radius:14px;background:#111b2c;color:var(--text);font-size:18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.stat{padding:13px;border:1px solid var(--line);border-radius:17px;background:#111a2bdc}.stat span{display:block;color:var(--muted);font-size:12px}.stat strong{display:block;font-size:22px;margin-top:4px}
+.tabs{display:flex;gap:7px;padding:5px;border:1px solid var(--line);background:#0d1525;border-radius:15px;margin-bottom:14px}.tab{flex:1;padding:11px 8px;border-radius:11px;background:transparent;color:var(--muted);font-size:14px}.tab.active{background:var(--panel2);color:var(--text);box-shadow:inset 0 0 0 1px #354565}
+.card{border:1px solid var(--line);border-radius:24px;background:linear-gradient(155deg,#17233a,#101827 70%);padding:clamp(17px,4vw,28px);box-shadow:0 18px 55px #0002}.card-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:20px}.pill{font-size:12px;padding:7px 10px;border:1px solid #3c4d70;border-radius:99px;color:#c6d2ed;background:#192641}.progress-wrap{height:6px;background:#283650;border-radius:9px;overflow:hidden;margin-bottom:24px}.progress{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .25s}
+.word-label{font-size:13px;color:var(--muted);text-align:center}.word{font-size:clamp(34px,9vw,54px);font-weight:800;letter-spacing:.3px;text-align:center;margin:7px 0 5px;direction:ltr}.translation-reveal{display:none;text-align:center;margin:8px auto 18px;padding:10px 14px;max-width:420px;border:1px solid #286c57;border-radius:13px;background:#12372f;color:#8ff0c7;font-size:20px;font-weight:800}.translation-reveal.show{display:block}.translation-reveal small{display:block;font-size:11px;font-weight:500;color:#b4dccc;margin-bottom:3px}.small-btn{border:1px solid var(--line);background:#1a2942;color:var(--text);border-radius:11px;padding:8px 13px;font-size:13px}
+.answer-label{display:block;font-size:14px;margin-bottom:9px;color:#d7e0f4}.answer-row{display:flex;gap:9px}.answer{flex:1;min-width:0;border:1px solid #3a4b6c;border-radius:14px;background:#0b1322;color:var(--text);padding:14px 15px;font-size:17px}
+.letter-boxes{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:7px;margin:12px auto 4px;max-width:560px;direction:rtl}
+.letter-box{width:clamp(30px,7.8vw,43px);height:clamp(40px,10vw,50px);border:1px solid #465a80;border-radius:10px;background:#0b1322;color:var(--text);text-align:center;font-size:21px;font-weight:750;padding:2px;caret-color:var(--accent2)}
+.letter-box:focus{border-color:var(--accent);box-shadow:0 0 0 2px #8b7cff30;outline:none}
+.letter-space{width:10px;height:35px;flex:0 0 10px;border-bottom:2px dashed #53627e;margin:0 2px 5px}
+.check-row{justify-content:center;margin-top:12px}.check-row .primary{min-width:145px}
+.primary{background:linear-gradient(110deg,#8a7cff,#5e8cff);color:white;font-weight:750;border-radius:14px;padding:13px 19px;box-shadow:0 8px 20px #7565ff30}.secondary{background:#22314c;color:var(--text);border:1px solid #354766;border-radius:14px;padding:12px 16px}.danger{background:#402536;color:#ffb8c0;border:1px solid #71404d;border-radius:14px;padding:10px 14px}
+.feedback{min-height:28px;margin:12px 0 0;font-size:14px;text-align:center}.feedback.good{color:var(--good)}.feedback.bad{color:var(--bad)}.hint-box{display:none;text-align:center;margin-top:10px;padding:11px;border:1px dashed #5c6299;background:#1b2341;border-radius:12px;color:#d8d5ff}.hint-box.show{display:block}
+.actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}.actions button{font-size:13px;padding:12px 7px}.bottom-note{text-align:center;color:var(--muted);font-size:12px;margin:16px 0 0}.screen{display:none}.screen.active{display:block}.section-title{font-size:20px;margin:0 0 6px}.section-sub{font-size:13px;color:var(--muted);margin:0 0 18px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.toolbar select,.toolbar input{border:1px solid var(--line);background:#0c1525;color:var(--text);border-radius:12px;padding:11px;min-width:0;flex:1}.list{display:grid;gap:9px}.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:14px;background:#111a2b}.item strong{direction:ltr;display:block}.item small{color:var(--muted)}.empty{text-align:center;padding:28px;color:var(--muted);border:1px dashed var(--line);border-radius:15px}.settings-grid{display:grid;gap:13px}.setting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#111a2b}.setting small{display:block;color:var(--muted);margin-top:4px}.setting input{accent-color:var(--accent);width:20px;height:20px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#e8fff7;color:#10231d;padding:11px 17px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px #0005;display:none;z-index:5;max-width:90%;text-align:center}.toast.show{display:block;animation:pop .2s ease}@keyframes pop{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
+@media(min-width:600px){body{padding-top:28px}.card{padding:30px}.answer-row{max-width:520px;margin:auto}.answer-label{max-width:520px;margin-inline:auto;margin-bottom:9px}.actions{max-width:520px;margin-inline:auto;margin-top:18px}}
+@media(max-width:380px){.brand p{display:none}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.actions{gap:5px}.actions button{font-size:12px}}
 </style>
 </head>
 <body>
-
-<!-- Start Screen -->
-<div id="start-screen" class="screen">
-  <h1>Word & Translation</h1>
-  <p>Learn Arabic words by translating from English interactively</p>
-  <div class="button-container">
-    <button onclick="startGame()">🎮 Start Game</button>
-    <button onclick="showWallet()">📚 View Wallet</button>
-  </div>
-
-  <!-- Support Bubble -->
-  <div class="support-bubble">
-    <p>.Support us to keep providing more</p>
-    <a href="https://www.paypal.com/qrcodes/p2pqrc/8F723UNEU3QHW" target="_blank"> PayPal</a>
-  </div>
+<div class="app">
+<header class="top">
+ <div class="brand"><div class="logo">文</div><div><h1>لعبة الكلمة الصحيحة</h1><p>تعلّم الإنجليزية كلمةً بعد كلمة</p></div></div>
+ <button class="icon-btn" id="settingsBtn" aria-label="الإعدادات" title="الإعدادات">⚙</button>
+</header>
+<section class="stats" aria-label="إحصائيات">
+ <div class="stat"><span>النقاط</span><strong id="score">0</strong></div>
+ <div class="stat"><span>الإجابات الصحيحة</span><strong id="correctCount">0</strong></div>
+ <div class="stat"><span>سلسلة متتالية</span><strong id="streak">0 🔥</strong></div>
+</section>
+<nav class="tabs" aria-label="التنقل">
+ <button class="tab active" data-screen="game">🎮 اللعب</button>
+ <button class="tab" data-screen="wallet">📚 محفظتي</button>
+ <button class="tab" data-screen="settings">⚙ الإعدادات</button>
+</nav>
+<main>
+<section class="screen active" id="game">
+ <div class="card">
+  <div class="card-head"><span class="pill" id="categoryPill">كلمات يومية</span><span class="pill" id="roundLabel">الكلمة 1</span></div>
+  <div class="progress-wrap"><div class="progress" id="progress"></div></div>
+  <div class="word-label">ترجم الكلمة التالية إلى العربية</div>
+  <div class="word" id="englishWord">Welcome</div>
+  <div class="translation-reveal" id="translationReveal" aria-live="polite"><small>الترجمة الصحيحة</small><span id="fullTranslation"></span></div>
+  <label class="answer-label" for="answer">اكتب الترجمة بالعربية</label>
+  <div class="letter-boxes" id="letterBoxes" dir="rtl" aria-label="مربعات كتابة الترجمة"></div>
+  <div class="answer-row check-row"><button class="primary" id="checkBtn">تحقّق</button></div>
+  <div class="feedback" id="feedback" aria-live="polite"></div>
+  <div class="hint-box" id="hintBox"></div>
+  <div class="actions"><button class="secondary" id="hintBtn">💡 تلميح</button><button class="secondary" id="skipBtn">⏭ تخطَّ</button><button class="secondary" id="saveBtn">☆ احفظ الكلمة</button></div>
+ </div>
+ <p class="bottom-note">تُحفظ الكلمات والإحصائيات على هذا الجهاز تلقائيًا.</p>
+</section>
+<section class="screen" id="wallet">
+ <div class="card"><h2 class="section-title">📚 محفظة الكلمات</h2><p class="section-sub">الكلمات التي حفظتها أو أجبت عنها بشكل صحيح.</p>
+ <div class="toolbar"><input id="searchWords" placeholder="ابحث عن كلمة..."><select id="walletFilter"><option value="all">كل الكلمات</option><option value="saved">المحفوظة فقط</option><option value="correct">أجبت عنها بشكل صحيح</option></select></div>
+ <div class="list" id="wordList"></div><div class="toolbar" style="margin-top:14px"><button class="secondary" id="exportBtn">⬇ تصدير الكلمات</button><button class="secondary" id="reviewBtn">🔁 مراجعة المحفوظة</button></div>
+ </div>
+</section>
+<section class="screen" id="settings">
+ <div class="card"><h2 class="section-title">⚙ الإعدادات</h2><p class="section-sub">خصّص طريقة تعلّمك.</p>
+ <div class="settings-grid">
+  <div class="setting"><div><strong>مستوى الكلمات</strong><small>اختر صعوبة الكلمات</small></div><select id="levelSelect"><option value="all">كل المستويات</option><option value="easy">سهل</option><option value="medium">متوسط</option><option value="hard">متقدم</option></select></div>
+  <div class="setting"><div><strong>إعادة ضبط التقدّم</strong><small>حذف النقاط والسلسلة والكلمات المسجلة</small></div><button class="danger" id="resetBtn">إعادة ضبط</button></div>
+ </div>
+ </div>
+</section>
+</main>
 </div>
-
-<!-- Game Screen -->
-<div id="game-screen" class="screen">
-  <h2 id="word"></h2>
-  <div id="input-container"></div>
-  <div id="progress-text"></div>
-  <div id="correct-word"></div>
-  <div class="button-container">
-    <button onclick="checkWord()">Check</button>
-    <button onclick="showHint()">💡 Hint</button>
-    <button onclick="nextWord()">⏭️ Skip</button>
-    <button onclick="restartGame()">🏠 Home</button>
-  </div>
-</div>
-
-<!-- End Screen -->
-<div id="end-screen" class="screen">
-  <h1>🏁You’ve finished the game 🏁</h1>
-  <div class="button-container">
-    <button onclick="showWallet()">📚 View Wallet</button>
-    <button onclick="restartGame()">🏠 Back to Home</button>
-  </div>
-
-  <!-- Support Bubble -->
-  <div class="support-bubble">
-    <p>.Support us to keep providing more</p>
-    <a href="https://www.paypal.com/qrcodes/p2pqrc/8F723UNEU3QHW" target="_blank"> PayPal</a>
-  </div>
-</div>
-
-<!-- Wallet Screen -->
-<div id="wallet-screen" class="screen">
-  <h1>📚 Wallet</h1>
-  <div id="wallet-list"></div>
-  <div class="button-container">
-    <button onclick="restartGame()">🏠 Back to Home</button>
-  </div>
-</div>
-
+<div class="toast" id="toast" role="status"></div>
 <script>
-const words = [
-  { english: "sun", arabic: "شمس" },
-  { english: "moon", arabic: "قمر" },
-  { english: "water", arabic: "ماء" },
-  { english: "sky", arabic: "سماء" },
-  { english: "tree", arabic: "شجرة" },
-  { english: "flower", arabic: "زهرة" },
-  { english: "car", arabic: "سيارة" },
-  { english: "book", arabic: "كتاب" },
-  { english: "city", arabic: "مدينة" },
-  { english: "heart", arabic: "قلب" },
-  { english: "river", arabic: "نهر" },
-  { english: "ball", arabic: "كرة" },
-  { english: "door", arabic: "باب" },
-  { english: "hand", arabic: "يد" },
-  { english: "eye", arabic: "عين" },
-  { english: "star", arabic: "نجم" },
-  { english: "pen", arabic: "قلم" },
-  { english: "clock", arabic: "ساعة" },
-  { english: "apple", arabic: "تفاحة" },
-  { english: "key", arabic: "مفتاح" },
-  { english: "house", arabic: "بيت" },
-  { english: "road", arabic: "طريق" },
-  { english: "school", arabic: "مدرسة" },
-  { english: "teacher", arabic: "معلم" },
-  { english: "student", arabic: "طالب" },
-  { english: "computer", arabic: "حاسوب" },
-  { english: "table", arabic: "طاولة" },
-  { english: "window", arabic: "نافذة" },
-  { english: "bread", arabic: "خبز" },
-  { english: "milk", arabic: "حليب" },
-  { english: "fish", arabic: "سمك" },
-  { english: "bird", arabic: "طائر" },
-  { english: "dog", arabic: "كلب" },
-  { english: "cat", arabic: "قط" },
-  { english: "horse", arabic: "حصان" },
-  { english: "mountain", arabic: "جبل" },
-  { english: "sea", arabic: "بحر" },
-  { english: "sand", arabic: "رمل" },
-  { english: "rain", arabic: "مطر" },
-  { english: "snow", arabic: "ثلج" },
-  { english: "fire", arabic: "نار" },
-  { english: "door", arabic: "باب" },
-  { english: "family", arabic: "عائلة" },
-  { english: "friend", arabic: "صديق" },
-  { english: "food", arabic: "طعام" },
+const WORDS = [
+{en:"Welcome",ar:["مرحبا","أهلا","أهلاً"],pron:"/ˈwelkəm/",cat:"التحيات",level:"easy"},
+{en:"Beautiful",ar:["جميل","جميلة"],pron:"/ˈbjuːtɪfəl/",cat:"صفات",level:"easy"},
+{en:"Book",ar:["كتاب"],pron:"/bʊk/",cat:"الدراسة",level:"easy"},
+{en:"Water",ar:["ماء"],pron:"/ˈwɔːtər/",cat:"الطعام",level:"easy"},
+{en:"Friend",ar:["صديق","صديقة"],pron:"/frend/",cat:"الناس",level:"easy"},
+{en:"Family",ar:["عائلة","أسرة"],pron:"/ˈfæməli/",cat:"الناس",level:"easy"},
+{en:"House",ar:["منزل","بيت"],pron:"/haʊs/",cat:"المنزل",level:"easy"},
+{en:"Window",ar:["نافذة","شباك"],pron:"/ˈwɪndoʊ/",cat:"المنزل",level:"easy"},
+{en:"Morning",ar:["صباح"],pron:"/ˈmɔːrnɪŋ/",cat:"الوقت",level:"easy"},
+{en:"Happy",ar:["سعيد","سعيدة","فرحان"],pron:"/ˈhæpi/",cat:"المشاعر",level:"easy"},
+{en:"Learn",ar:["يتعلم","تعلم"],pron:"/lɜːrn/",cat:"الدراسة",level:"easy"},
+{en:"Travel",ar:["يسافر","سفر"],pron:"/ˈtrævəl/",cat:"السفر",level:"easy"},
+{en:"Computer",ar:["حاسوب","كمبيوتر"],pron:"/kəmˈpjuːtər/",cat:"التكنولوجيا",level:"easy"},
+{en:"Food",ar:["طعام","أكل"],pron:"/fuːd/",cat:"الطعام",level:"easy"},
+{en:"Work",ar:["عمل","يعمل"],pron:"/wɜːrk/",cat:"العمل",level:"easy"},
+{en:"Quickly",ar:["بسرعة"],pron:"/ˈkwɪkli/",cat:"صفات وأحوال",level:"medium"},
+{en:"Improve",ar:["يحسن","يطور","تحسين","تطوير"],pron:"/ɪmˈpruːv/",cat:"التعلم",level:"medium"},
+{en:"Journey",ar:["رحلة"],pron:"/ˈdʒɜːrni/",cat:"السفر",level:"medium"},
+{en:"Choose",ar:["يختار","اختر","اختيار"],pron:"/tʃuːz/",cat:"أفعال",level:"medium"},
+{en:"Knowledge",ar:["معرفة","علم"],pron:"/ˈnɑːlɪdʒ/",cat:"التعلم",level:"medium"},
+{en:"Environment",ar:["بيئة"],pron:"/ɪnˈvaɪrənmənt/",cat:"الطبيعة",level:"medium"},
+{en:"Opportunity",ar:["فرصة"],pron:"/ˌɑːpərˈtuːnəti/",cat:"العمل",level:"medium"},
+{en:"Reliable",ar:["موثوق","جدير بالثقة"],pron:"/rɪˈlaɪəbəl/",cat:"صفات",level:"medium"},
+{en:"Develop",ar:["يطور","ينمي","تطوير"],pron:"/dɪˈveləp/",cat:"التعلم",level:"medium"},
+{en:"Therefore",ar:["لذلك","وبالتالي"],pron:"/ˈðerfɔːr/",cat:"روابط",level:"medium"},
+{en:"Achievement",ar:["إنجاز"],pron:"/əˈtʃiːvmənt/",cat:"العمل",level:"hard"},
+{en:"Sustainable",ar:["مستدام"],pron:"/səˈsteɪnəbəl/",cat:"الطبيعة",level:"hard"},
+{en:"Curiosity",ar:["فضول"],pron:"/ˌkjʊriˈɑːsəti/",cat:"صفات",level:"hard"},
+{en:"Efficient",ar:["فعال","كفء","فعّال"],pron:"/ɪˈfɪʃənt/",cat:"العمل",level:"hard"},
+{en:"Consequently",ar:["وبالتالي","نتيجة لذلك"],pron:"/ˈkɑːnsɪkwəntli/",cat:"روابط",level:"hard"},
+{en:"Accurate",ar:["دقيق","صحيح"],pron:"/ˈækjərət/",cat:"صفات",level:"hard"},
+{en:"Improve",ar:["يحسّن","يطوّر"],pron:"/ɪmˈpruːv/",cat:"أفعال",level:"hard"},
+{en:"Challenge",ar:["تحد","تحدي","تحدٍّ"],pron:"/ˈtʃælɪndʒ/",cat:"التعلم",level:"medium"},
+{en:"Decision",ar:["قرار"],pron:"/dɪˈsɪʒən/",cat:"الحياة",level:"medium"},
+{en:"Confidence",ar:["ثقة"],pron:"/ˈkɑːnfɪdəns/",cat:"المشاعر",level:"medium"},
+{en:"Electricity",ar:["كهرباء"],pron:"/ɪˌlekˈtrɪsəti/",cat:"التكنولوجيا",level:"medium"},
+{en:"Energy",ar:["طاقة"],pron:"/ˈenərdʒi/",cat:"التكنولوجيا",level:"easy"},
+{en:"Device",ar:["جهاز"],pron:"/dɪˈvaɪs/",cat:"التكنولوجيا",level:"easy"},
+{en:"Repair",ar:["يصلح","إصلاح"],pron:"/rɪˈper/",cat:"أفعال",level:"medium"},
+{en:"Discover",ar:["يكتشف","اكتشاف"],pron:"/dɪˈskʌvər/",cat:"أفعال",level:"medium"},
+{en:"Carefully",ar:["بعناية","بحذر"],pron:"/ˈkerfəli/",cat:"صفات وأحوال",level:"medium"},
+{en:"Experience",ar:["تجربة","خبرة"],pron:"/ɪkˈspɪriəns/",cat:"الحياة",level:"medium"},
+{en:"Purpose",ar:["هدف","غرض"],pron:"/ˈpɜːrpəs/",cat:"الحياة",level:"medium"},
+{en:"Responsibility",ar:["مسؤولية"],pron:"/rɪˌspɑːnsəˈbɪləti/",cat:"الحياة",level:"hard"},
+{en:"Independence",ar:["استقلال"],pron:"/ˌɪndɪˈpendəns/",cat:"الحياة",level:"hard"},
+{en:"Solution",ar:["حل"],pron:"/səˈluːʃən/",cat:"التعلم",level:"medium"},
+{en:"Prevent",ar:["يمنع","يحول دون"],pron:"/prɪˈvent/",cat:"أفعال",level:"medium"},
+{en:"Opportunity",ar:["فرصة"],pron:"/ˌɑːpərˈtuːnəti/",cat:"العمل",level:"medium"},
+{en:"Strength",ar:["قوة"],pron:"/streŋθ/",cat:"صفات",level:"hard"},
+{en:"Patience",ar:["صبر"],pron:"/ˈpeɪʃəns/",cat:"صفات",level:"medium"}
 ];
-
-let currentIndex = 0;
-let wallet = JSON.parse(localStorage.getItem("wallet")) || [];
-
-const startScreen = document.getElementById("start-screen");
-const gameScreen = document.getElementById("game-screen");
-const endScreen = document.getElementById("end-screen");
-const walletScreen = document.getElementById("wallet-screen");
-const wordElement = document.getElementById("word");
-const inputContainer = document.getElementById("input-container");
-const progressText = document.getElementById("progress-text");
-const correctWordElement = document.getElementById("correct-word");
-const walletList = document.getElementById("wallet-list");
-
-function showScreen(screen) {
-  [startScreen, gameScreen, endScreen, walletScreen].forEach(s => s.style.display = "none");
-  screen.style.display = "flex";
+const $=id=>document.getElementById(id);
+const load=(k,d)=>{try{return JSON.parse(localStorage.getItem("wct_"+k))??d}catch{return d}};
+let data=load("data",{score:0,correct:0,streak:0,best:0,answered:[],saved:[],missed:[]});
+let settings=load("settings",{level:"all",sound:true,pron:true});
+let deck=[],index=0,current=null, hintUsed=false, locked=false, reviewMode=false;
+function persist(){localStorage.setItem("wct_data",JSON.stringify(data));localStorage.setItem("wct_settings",JSON.stringify(settings));renderStats()}
+function norm(s){return (s||"").toString().trim().replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/\s+/g," ").toLowerCase()}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function renderStats(){$("score").textContent=data.score;$("correctCount").textContent=data.correct;$("streak").textContent=data.streak+" 🔥"}
+function makeDeck(){let pool=WORDS.filter(w=>settings.level==="all"||w.level===settings.level);if(reviewMode){pool=pool.filter(w=>data.saved.includes(w.en));if(!pool.length){toast("لا توجد كلمات محفوظة للمراجعة بعد.");reviewMode=false;pool=WORDS.filter(w=>settings.level==="all"||w.level===settings.level)}}deck=shuffle([...pool]);index=0}
+function renderWord(){
+ if(!deck.length)makeDeck();
+ if(index>=deck.length){deck=shuffle([...deck]);index=0;toast("أكملت هذه الجولة! أحسنت 🎉")}
+ current=deck[index];hintUsed=false;locked=false;
+ $("englishWord").textContent=current.en;
+ $("translationReveal").className="translation-reveal";$("fullTranslation").textContent="";
+ $("categoryPill").textContent=current.cat;
+ $("roundLabel").textContent=`الكلمة ${index+1} / ${deck.length}`;
+ $("progress").style.width=`${((index+1)/deck.length)*100}%`;
+ $("letterBoxes").innerHTML="";
+ const chars=[...current.ar[0]];
+ chars.forEach((ch,i)=>{
+   if(/\s/.test(ch)){
+     const gap=document.createElement("span");gap.className="letter-space";gap.setAttribute("aria-hidden","true");$("letterBoxes").append(gap);
+   } else {
+     const input=document.createElement("input");
+     input.className="letter-box";input.type="text";input.maxLength=1;input.autocomplete="off";
+     input.autocapitalize="off";input.spellcheck=false;input.inputMode="text";
+     input.setAttribute("aria-label",`الحرف ${i+1}`);
+     input.dataset.answerIndex=String(i);
+     input.addEventListener("input",()=>{
+       const val=[...input.value].slice(-1)[0]||"";
+       input.value=val;
+       if(val){const boxes=getBoxes();const at=boxes.indexOf(input);if(at>=0&&boxes[at+1])boxes[at+1].focus();}
+     });
+     input.addEventListener("keydown",e=>{
+       const boxes=getBoxes(),at=boxes.indexOf(input);
+       if(e.key==="Backspace"&&!input.value&&at>0){boxes[at-1].focus();}
+       if(e.key==="Enter")check();
+       if(e.key==="ArrowLeft"&&boxes[at+1]){e.preventDefault();boxes[at+1].focus();}
+       if(e.key==="ArrowRight"&&boxes[at-1]){e.preventDefault();boxes[at-1].focus();}
+     });
+     $("letterBoxes").append(input);
+   }
+ });
+ $("checkBtn").disabled=false;
+ $("feedback").textContent="";$("feedback").className="feedback";
+ $("hintBox").className="hint-box";$("hintBox").textContent="";
+ $("saveBtn").textContent=data.saved.includes(current.en)?"★ محفوظة":"☆ احفظ الكلمة";
+ const first=getBoxes()[0];if(first)first.focus({preventScroll:true});
 }
-
-function startGame() {
-  currentIndex = 0;
-  showScreen(gameScreen);
-  loadWord();
+function getBoxes(){return [...$("letterBoxes").querySelectorAll(".letter-box")]}
+function getAnswer(){
+ let result="",boxIndex=0;
+ for(const ch of [...current.ar[0]]){
+   if(/\s/.test(ch))result+=" ";
+   else result+=getBoxes()[boxIndex++]?.value||"";
+ }
+ return result;
 }
-
-function loadWord() {
-  if (currentIndex >= words.length) return endGame();
-  const word = words[currentIndex];
-  wordElement.textContent = `Translate: ${word.english}`;
-  inputContainer.innerHTML = "";
-  correctWordElement.textContent = "";
-
-  for (let i = 0; i < word.arabic.length; i++) {
-    const input = document.createElement("input");
-    input.className = "input-box";
-    input.maxLength = 1;
-    input.dataset.index = i;
-    input.addEventListener("input", () => {
-      if (i < word.arabic.length - 1 && input.value)
-        inputContainer.children[i + 1].focus();
-    });
-    input.addEventListener("keydown", e => {
-      const inputs = [...inputContainer.children];
-      const idx = inputs.indexOf(e.target);
-      if (e.key === "Backspace" && !e.target.value && idx > 0)
-        inputs[idx - 1].focus();
-      if (e.key === "Enter") checkWord();
-    });
-    inputContainer.appendChild(input);
-  }
-
-  inputContainer.firstChild.focus();
-  updateProgress();
+function next(){index++;renderWord()}
+function check(){
+ if(locked)return;
+ let val=norm(getAnswer());
+ if(!val){$("feedback").textContent="املأ مربعات الحروف أولًا.";return}
+ let ok=current.ar.some(a=>norm(a)===val);
+ if(ok){
+   locked=true;data.score+=hintUsed?5:10;data.correct++;data.streak++;data.best=Math.max(data.best,data.streak);
+   if(!data.answered.includes(current.en))data.answered.push(current.en);
+   if(!data.saved.includes(current.en))data.saved.push(current.en);
+   persist();$("feedback").textContent="إجابة صحيحة! أحسنت 🎉"+(hintUsed?" (+5 نقاط)":" (+10 نقاط)");
+   $("feedback").className="feedback good";$("fullTranslation").textContent=current.ar[0];$("translationReveal").className="translation-reveal show";getBoxes().forEach(b=>b.disabled=true);
+   $("checkBtn").disabled=true;$("saveBtn").textContent="★ محفوظة";setTimeout(next,1100);
+ }else{
+   data.streak=0;data.missed.unshift(current.en);data.missed=[...new Set(data.missed)].slice(0,100);persist();
+   $("feedback").textContent="ليست صحيحة تمامًا، حاول مرة أخرى.";
+   $("feedback").className="feedback bad";
+   const first=getBoxes().find(b=>!b.value);if(first)first.focus();
+ }
 }
-
-function checkWord() {
-  const inputs = [...inputContainer.children];
-  const guess = inputs.map(i => i.value).join("");
-  const correct = words[currentIndex].arabic;
-
-  if (guess === correct) {
-    inputs.forEach(i => i.classList.add("correct"));
-    correctWordElement.innerHTML =
-      "✅ <span style='direction: rtl; unicode-bidi: bidi-override;'>" + correct + "</span>";
-    if (!wallet.some(w => w.english === words[currentIndex].english)) {
-      wallet.push(words[currentIndex]);
-      localStorage.setItem("wallet", JSON.stringify(wallet));
-    }
-    setTimeout(nextWord, 1000);
-  } else {
-    inputs.forEach((i, idx) => {
-      if (i.value !== correct[idx]) {
-        i.classList.add("wrong");
-        i.value = "";
-      }
-    });
-    setTimeout(() => inputs.forEach(i => i.classList.remove("wrong")), 600);
-    inputContainer.firstChild.focus();
-  }
+function hint(){
+ const boxes=getBoxes(), answerChars=[...current.ar[0]];
+ let target=null;
+ for(let i=0;i<answerChars.length;i++){
+   if(/\s/.test(answerChars[i]))continue;
+   const box=boxes.find(b=>Number(b.dataset.answerIndex)===i);
+   if(box&&!box.value){target={box,ch:answerChars[i]};break;}
+ }
+ if(!target)return;
+ hintUsed=true;target.box.value=target.ch;target.box.focus();
+ // Hint silently fills one correct letter without displaying a message.
+ $("hintBox").textContent="";
+ $("hintBox").className="hint-box";
 }
-
-function showHint() {
-  const word = words[currentIndex].arabic;
-  const emptyInputs = [...inputContainer.children].filter(i => !i.value);
-  if (emptyInputs.length > 0) {
-    const randomInput = emptyInputs[Math.floor(Math.random() * emptyInputs.length)];
-    const idx = randomInput.dataset.index;
-    randomInput.value = word[idx];
-    randomInput.classList.add("correct");
-  }
-}
-
-function nextWord() {
-  currentIndex++;
-  loadWord();
-}
-
-function updateProgress() {
-  progressText.textContent = `Word ${currentIndex + 1} of ${words.length}`;
-}
-
-function endGame() {
-  showScreen(endScreen);
-}
-
-function showWallet() {
-  showScreen(walletScreen);
-  walletList.innerHTML = "";
-  if (wallet.length === 0) {
-    walletList.innerHTML = "<p>No saved words yet 🎒</p>";
-  } else {
-    wallet.forEach(w => {
-      const p = document.createElement("p");
-      p.innerHTML = `🔹 ${w.english} = <span style='direction: rtl; unicode-bidi: bidi-override;'>${w.arabic}</span>`;
-      walletList.appendChild(p);
-    });
-  }
-}
-
-function restartGame() {
-  showScreen(startScreen);
-}
+function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>$("toast").classList.remove("show"),2200)}
+function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.screen===id));if(id==="wallet")renderWallet();if(id==="settings")renderSettings()}
+function renderWallet(){let q=norm($("searchWords").value),f=$("walletFilter").value;let list=WORDS.filter(w=>{let saved=data.saved.includes(w.en),correct=data.answered.includes(w.en);return (!q||norm(w.en).includes(q)||w.ar.some(a=>norm(a).includes(q)))&&(f==="all"||f==="saved"&&saved||f==="correct"&&correct)});$("wordList").innerHTML="";if(!list.length){$("wordList").innerHTML='<div class="empty">لا توجد كلمات مطابقة بعد.</div>';return}list.forEach(w=>{let saved=data.saved.includes(w.en),correct=data.answered.includes(w.en),div=document.createElement("div");div.className="item";let left=document.createElement("div"),strong=document.createElement("strong"),small=document.createElement("small");strong.textContent=w.en;small.textContent=w.ar.join(" / ")+(correct?" · ✓ صحيحة":"");left.append(strong,small);let b=document.createElement("button");b.className="small-btn";b.textContent=saved?"★":"☆";b.title=saved?"إزالة من المحفوظات":"حفظ";b.onclick=()=>{data.saved=saved?data.saved.filter(x=>x!==w.en):[...data.saved,w.en];persist();renderWallet()};div.append(left,b);$("wordList").append(div)})}
+function renderSettings(){$("levelSelect").value=settings.level}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));$("settingsBtn").onclick=()=>showScreen("settings");$("checkBtn").onclick=check;$("hintBtn").onclick=hint;$("skipBtn").onclick=()=>{data.streak=0;persist();next()};$("saveBtn").onclick=()=>{if(data.saved.includes(current.en))data.saved=data.saved.filter(x=>x!==current.en);else data.saved.push(current.en);persist();$("saveBtn").textContent=data.saved.includes(current.en)?"★ محفوظة":"☆ احفظ الكلمة";toast(data.saved.includes(current.en)?"تم حفظ الكلمة":"تمت إزالة الكلمة")};$("searchWords").oninput=renderWallet;$("walletFilter").onchange=renderWallet;$("levelSelect").onchange=e=>{settings.level=e.target.value;persist();reviewMode=false;makeDeck();renderWord();toast("تم تحديث مستوى الكلمات")};$("reviewBtn").onclick=()=>{reviewMode=true;makeDeck();showScreen("game");renderWord();toast("بدأت مراجعة الكلمات المحفوظة")};$("exportBtn").onclick=()=>{let rows=[["English","Arabic","Category","Level","Saved","Correct"],...WORDS.map(w=>[w.en,w.ar.join(" / "),w.cat,w.level,data.saved.includes(w.en)?"yes":"no",data.answered.includes(w.en)?"yes":"no"])];let csv="\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="my-english-arabic-words.csv";a.click();URL.revokeObjectURL(url)};$("resetBtn").onclick=()=>{if(confirm("هل أنت متأكد؟ سيتم حذف النقاط والكلمات المحفوظة والتقدّم من هذا الجهاز.")){data={score:0,correct:0,streak:0,best:0,answered:[],saved:[],missed:[]};persist();makeDeck();renderWord();toast("تمت إعادة ضبط التقدم")}};
+makeDeck();renderStats();renderWord();
 </script>
 </body>
 </html>
