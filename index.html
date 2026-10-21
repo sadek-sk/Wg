@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#101827">
-<meta name="description" content="لعبة الكلمة الصحيحة — تعلّم الإنجليزية بطريقة ممتعة مع ترجمة عربية ومراجعة للكلمات.">
-<title>لعبة الكلمة الصحيحة | Word & Translation</title>
+<meta name="description" content="Word & Translation — Learn English with Arabic translations and review.">
+<title>Word & Translation</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1020;--panel:#121b2e;--panel2:#18243b;--text:#f4f7ff;--muted:#a8b4cc;--line:#2a3956;--accent:#8b7cff;--accent2:#38d9c5;--good:#45d69a;--bad:#ff6b7b;--gold:#ffd166}
 *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(900px 450px at 10% -10%,#29336a 0%,transparent 60%),radial-gradient(700px 400px at 100% 0%,#124b59 0%,transparent 55%),var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;color:var(--text);padding:18px 14px 32px}
@@ -26,110 +26,117 @@ button,input,select{font:inherit}button{cursor:pointer;border:0;transition:trans
 .actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:16px}.actions button{font-size:13px;padding:12px 7px}.bottom-note{text-align:center;color:var(--muted);font-size:12px;margin:16px 0 0}.screen{display:none}.screen.active{display:block}.section-title{font-size:20px;margin:0 0 6px}.section-sub{font-size:13px;color:var(--muted);margin:0 0 18px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.toolbar select,.toolbar input{border:1px solid var(--line);background:#0c1525;color:var(--text);border-radius:12px;padding:11px;min-width:0;flex:1}.list{display:grid;gap:9px}.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px;border:1px solid var(--line);border-radius:14px;background:#111a2b}.item strong{direction:ltr;display:block}.item small{color:var(--muted)}.empty{text-align:center;padding:28px;color:var(--muted);border:1px dashed var(--line);border-radius:15px}.settings-grid{display:grid;gap:13px}.setting{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px;border:1px solid var(--line);border-radius:14px;background:#111a2b}.setting small{display:block;color:var(--muted);margin-top:4px}.setting input{accent-color:var(--accent);width:20px;height:20px}.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#e8fff7;color:#10231d;padding:11px 17px;border-radius:12px;font-weight:700;box-shadow:0 8px 30px #0005;display:none;z-index:5;max-width:90%;text-align:center}.toast.show{display:block;animation:pop .2s ease}@keyframes pop{from{opacity:0;translate:0 8px}to{opacity:1;translate:0 0}}
 @media(min-width:600px){body{padding-top:28px}.card{padding:30px}.answer-row{max-width:520px;margin:auto}.answer-label{max-width:520px;margin-inline:auto;margin-bottom:9px}.actions{max-width:520px;margin-inline:auto;margin-top:18px}}
 @media(max-width:380px){.brand p{display:none}.stats{gap:6px}.stat{padding:10px}.stat strong{font-size:19px}.actions{gap:5px}.actions button{font-size:12px}}
+
+.reddit-link{position:fixed;left:14px;bottom:14px;width:42px;height:42px;display:grid;place-items:center;background:#ff4500;border-radius:50%;box-shadow:0 4px 14px #0005;z-index:10;transition:transform .2s}
+.reddit-link:hover{transform:scale(1.08)}
+.reddit-link svg{width:25px;height:25px;fill:#fff}
 </style>
 </head>
 <body>
 <div class="app">
 <header class="top">
- <div class="brand"><div class="logo">文</div><div><h1>لعبة الكلمة الصحيحة</h1><p>تعلّم الإنجليزية كلمةً بعد كلمة</p></div></div>
- <button class="icon-btn" id="settingsBtn" aria-label="الإعدادات" title="الإعدادات">⚙</button>
+ <div class="brand"><div class="logo">W</div><div><h1>Word & Translation</h1><p>Learn English one word at a time</p></div></div>
+ <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">⚙</button>
 </header>
-<section class="stats" aria-label="إحصائيات">
- <div class="stat"><span>النقاط</span><strong id="score">0</strong></div>
- <div class="stat"><span>الإجابات الصحيحة</span><strong id="correctCount">0</strong></div>
- <div class="stat"><span>سلسلة متتالية</span><strong id="streak">0 🔥</strong></div>
+<section class="stats" aria-label="Statistics">
+ <div class="stat"><span>Score</span><strong id="score">0</strong></div>
+ <div class="stat"><span>Correct Answers</span><strong id="correctCount">0</strong></div>
+ <div class="stat"><span>Streak</span><strong id="streak">0 🔥</strong></div>
 </section>
-<nav class="tabs" aria-label="التنقل">
- <button class="tab active" data-screen="game">🎮 اللعب</button>
- <button class="tab" data-screen="wallet">📚 محفظتي</button>
- <button class="tab" data-screen="settings">⚙ الإعدادات</button>
+<nav class="tabs" aria-label="Navigation">
+ <button class="tab active" data-screen="game">🎮 Play</button>
+ <button class="tab" data-screen="wallet">📚 My Words</button>
+ <button class="tab" data-screen="settings">⚙ Settings</button>
 </nav>
 <main>
 <section class="screen active" id="game">
  <div class="card">
-  <div class="card-head"><span class="pill" id="categoryPill">كلمات يومية</span><span class="pill" id="roundLabel">الكلمة 1</span></div>
+  <div class="card-head"><span class="pill" id="categoryPill">Daily Words</span><span class="pill" id="roundLabel">Word 1</span></div>
   <div class="progress-wrap"><div class="progress" id="progress"></div></div>
-  <div class="word-label">ترجم الكلمة التالية إلى العربية</div>
+  <div class="word-label">Translate the following word into Arabic</div>
   <div class="word" id="englishWord">Welcome</div>
-  <div class="translation-reveal" id="translationReveal" aria-live="polite"><small>الترجمة الصحيحة</small><span id="fullTranslation"></span></div>
-  <label class="answer-label" for="answer">اكتب الترجمة بالعربية</label>
-  <div class="letter-boxes" id="letterBoxes" dir="rtl" aria-label="مربعات كتابة الترجمة"></div>
-  <div class="answer-row check-row"><button class="primary" id="checkBtn">تحقّق</button></div>
+  <div class="translation-reveal" id="translationReveal" aria-live="polite"><small>Correct translation</small><span id="fullTranslation"></span></div>
+  <label class="answer-label" for="answer">Enter the Arabic translation</label>
+  <div class="letter-boxes" id="letterBoxes" dir="rtl" aria-label="Arabic answer letter boxes"></div>
+  <div class="answer-row check-row"><button class="primary" id="checkBtn">Check Answer</button></div>
   <div class="feedback" id="feedback" aria-live="polite"></div>
   <div class="hint-box" id="hintBox"></div>
-  <div class="actions"><button class="secondary" id="hintBtn">💡 تلميح</button><button class="secondary" id="skipBtn">⏭ تخطَّ</button><button class="secondary" id="saveBtn">☆ احفظ الكلمة</button></div>
+  <div class="actions"><button class="secondary" id="hintBtn">💡 Hint</button><button class="secondary" id="skipBtn">⏭ Skip</button><button class="secondary" id="saveBtn">☆ Save Word</button></div>
  </div>
- <p class="bottom-note">تُحفظ الكلمات والإحصائيات على هذا الجهاز تلقائيًا.</p>
+ <p class="bottom-note">Words and stats are saved automatically on this device.</p>
 </section>
 <section class="screen" id="wallet">
- <div class="card"><h2 class="section-title">📚 محفظة الكلمات</h2><p class="section-sub">الكلمات التي حفظتها أو أجبت عنها بشكل صحيح.</p>
- <div class="toolbar"><input id="searchWords" placeholder="ابحث عن كلمة..."><select id="walletFilter"><option value="all">كل الكلمات</option><option value="saved">المحفوظة فقط</option><option value="correct">أجبت عنها بشكل صحيح</option></select></div>
- <div class="list" id="wordList"></div><div class="toolbar" style="margin-top:14px"><button class="secondary" id="exportBtn">⬇ تصدير الكلمات</button><button class="secondary" id="reviewBtn">🔁 مراجعة المحفوظة</button></div>
+ <div class="card"><h2 class="section-title">📚 Word Wallet</h2><p class="section-sub">Words you saved or answered correctly.</p>
+ <div class="toolbar"><input id="searchWords" placeholder="Search words..."><select id="walletFilter"><option value="all">All words</option><option value="saved">Saved only</option><option value="correct">Correct answers</option></select></div>
+ <div class="list" id="wordList"></div><div class="toolbar" style="margin-top:14px"><button class="secondary" id="exportBtn">⬇ Export Words</button><button class="secondary" id="reviewBtn">🔁 Review Saved</button></div>
  </div>
 </section>
 <section class="screen" id="settings">
- <div class="card"><h2 class="section-title">⚙ الإعدادات</h2><p class="section-sub">خصّص طريقة تعلّمك.</p>
+ <div class="card"><h2 class="section-title">⚙ Settings</h2><p class="section-sub">Customize your learning experience.</p>
  <div class="settings-grid">
-  <div class="setting"><div><strong>مستوى الكلمات</strong><small>اختر صعوبة الكلمات</small></div><select id="levelSelect"><option value="all">كل المستويات</option><option value="easy">سهل</option><option value="medium">متوسط</option><option value="hard">متقدم</option></select></div>
-  <div class="setting"><div><strong>إعادة ضبط التقدّم</strong><small>حذف النقاط والسلسلة والكلمات المسجلة</small></div><button class="danger" id="resetBtn">إعادة ضبط</button></div>
+  <div class="setting"><div><strong>Word Difficulty</strong><small>Choose a difficulty level</small></div><select id="levelSelect"><option value="all">All levels</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Advanced</option></select></div>
+  <div class="setting"><div><strong>Reset Progress</strong><small>Delete score, streak, and saved words</small></div><button class="danger" id="resetBtn">Reset</button></div>
  </div>
  </div>
 </section>
 </main>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<a class="reddit-link" href="https://www.reddit.com/u/Professional_Tap_882/s/PkpDwODe2a" target="_blank" rel="noopener noreferrer" aria-label="Reddit" title="Reddit">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12a3 3 0 0 0-5.12-2.12 14.1 14.1 0 0 0-5.9-1.8l1-4.7 3.27.7a2 2 0 1 0 .2-1.1l-4.1-.88a.6.6 0 0 0-.72.46l-1.16 5.5a14.3 14.3 0 0 0-6.34 1.82A3 3 0 1 0 1.8 14.2a5.3 5.3 0 0 0-.1 1c0 4.05 4.62 7.34 10.3 7.34s10.3-3.29 10.3-7.34a5.3 5.3 0 0 0-.1-1A3 3 0 0 0 24 12ZM7.5 14a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Zm8.2 4.1a6.2 6.2 0 0 1-7.4 0 .55.55 0 0 1 .7-.84 5.1 5.1 0 0 0 6 0 .55.55 0 0 1 .7.84Zm.8-4.1a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3Z"/></svg>
+</a>
 <script>
 const WORDS = [
-{en:"Welcome",ar:["مرحبا","أهلا","أهلاً"],pron:"/ˈwelkəm/",cat:"التحيات",level:"easy"},
-{en:"Beautiful",ar:["جميل","جميلة"],pron:"/ˈbjuːtɪfəl/",cat:"صفات",level:"easy"},
-{en:"Book",ar:["كتاب"],pron:"/bʊk/",cat:"الدراسة",level:"easy"},
-{en:"Water",ar:["ماء"],pron:"/ˈwɔːtər/",cat:"الطعام",level:"easy"},
-{en:"Friend",ar:["صديق","صديقة"],pron:"/frend/",cat:"الناس",level:"easy"},
-{en:"Family",ar:["عائلة","أسرة"],pron:"/ˈfæməli/",cat:"الناس",level:"easy"},
-{en:"House",ar:["منزل","بيت"],pron:"/haʊs/",cat:"المنزل",level:"easy"},
-{en:"Window",ar:["نافذة","شباك"],pron:"/ˈwɪndoʊ/",cat:"المنزل",level:"easy"},
-{en:"Morning",ar:["صباح"],pron:"/ˈmɔːrnɪŋ/",cat:"الوقت",level:"easy"},
-{en:"Happy",ar:["سعيد","سعيدة","فرحان"],pron:"/ˈhæpi/",cat:"المشاعر",level:"easy"},
-{en:"Learn",ar:["يتعلم","تعلم"],pron:"/lɜːrn/",cat:"الدراسة",level:"easy"},
-{en:"Travel",ar:["يسافر","سفر"],pron:"/ˈtrævəl/",cat:"السفر",level:"easy"},
-{en:"Computer",ar:["حاسوب","كمبيوتر"],pron:"/kəmˈpjuːtər/",cat:"التكنولوجيا",level:"easy"},
-{en:"Food",ar:["طعام","أكل"],pron:"/fuːd/",cat:"الطعام",level:"easy"},
-{en:"Work",ar:["عمل","يعمل"],pron:"/wɜːrk/",cat:"العمل",level:"easy"},
-{en:"Quickly",ar:["بسرعة"],pron:"/ˈkwɪkli/",cat:"صفات وأحوال",level:"medium"},
-{en:"Improve",ar:["يحسن","يطور","تحسين","تطوير"],pron:"/ɪmˈpruːv/",cat:"التعلم",level:"medium"},
-{en:"Journey",ar:["رحلة"],pron:"/ˈdʒɜːrni/",cat:"السفر",level:"medium"},
-{en:"Choose",ar:["يختار","اختر","اختيار"],pron:"/tʃuːz/",cat:"أفعال",level:"medium"},
-{en:"Knowledge",ar:["معرفة","علم"],pron:"/ˈnɑːlɪdʒ/",cat:"التعلم",level:"medium"},
-{en:"Environment",ar:["بيئة"],pron:"/ɪnˈvaɪrənmənt/",cat:"الطبيعة",level:"medium"},
-{en:"Opportunity",ar:["فرصة"],pron:"/ˌɑːpərˈtuːnəti/",cat:"العمل",level:"medium"},
-{en:"Reliable",ar:["موثوق","جدير بالثقة"],pron:"/rɪˈlaɪəbəl/",cat:"صفات",level:"medium"},
-{en:"Develop",ar:["يطور","ينمي","تطوير"],pron:"/dɪˈveləp/",cat:"التعلم",level:"medium"},
-{en:"Therefore",ar:["لذلك","وبالتالي"],pron:"/ˈðerfɔːr/",cat:"روابط",level:"medium"},
-{en:"Achievement",ar:["إنجاز"],pron:"/əˈtʃiːvmənt/",cat:"العمل",level:"hard"},
-{en:"Sustainable",ar:["مستدام"],pron:"/səˈsteɪnəbəl/",cat:"الطبيعة",level:"hard"},
-{en:"Curiosity",ar:["فضول"],pron:"/ˌkjʊriˈɑːsəti/",cat:"صفات",level:"hard"},
-{en:"Efficient",ar:["فعال","كفء","فعّال"],pron:"/ɪˈfɪʃənt/",cat:"العمل",level:"hard"},
-{en:"Consequently",ar:["وبالتالي","نتيجة لذلك"],pron:"/ˈkɑːnsɪkwəntli/",cat:"روابط",level:"hard"},
-{en:"Accurate",ar:["دقيق","صحيح"],pron:"/ˈækjərət/",cat:"صفات",level:"hard"},
-{en:"Improve",ar:["يحسّن","يطوّر"],pron:"/ɪmˈpruːv/",cat:"أفعال",level:"hard"},
-{en:"Challenge",ar:["تحد","تحدي","تحدٍّ"],pron:"/ˈtʃælɪndʒ/",cat:"التعلم",level:"medium"},
-{en:"Decision",ar:["قرار"],pron:"/dɪˈsɪʒən/",cat:"الحياة",level:"medium"},
-{en:"Confidence",ar:["ثقة"],pron:"/ˈkɑːnfɪdəns/",cat:"المشاعر",level:"medium"},
-{en:"Electricity",ar:["كهرباء"],pron:"/ɪˌlekˈtrɪsəti/",cat:"التكنولوجيا",level:"medium"},
-{en:"Energy",ar:["طاقة"],pron:"/ˈenərdʒi/",cat:"التكنولوجيا",level:"easy"},
-{en:"Device",ar:["جهاز"],pron:"/dɪˈvaɪs/",cat:"التكنولوجيا",level:"easy"},
-{en:"Repair",ar:["يصلح","إصلاح"],pron:"/rɪˈper/",cat:"أفعال",level:"medium"},
-{en:"Discover",ar:["يكتشف","اكتشاف"],pron:"/dɪˈskʌvər/",cat:"أفعال",level:"medium"},
-{en:"Carefully",ar:["بعناية","بحذر"],pron:"/ˈkerfəli/",cat:"صفات وأحوال",level:"medium"},
-{en:"Experience",ar:["تجربة","خبرة"],pron:"/ɪkˈspɪriəns/",cat:"الحياة",level:"medium"},
-{en:"Purpose",ar:["هدف","غرض"],pron:"/ˈpɜːrpəs/",cat:"الحياة",level:"medium"},
-{en:"Responsibility",ar:["مسؤولية"],pron:"/rɪˌspɑːnsəˈbɪləti/",cat:"الحياة",level:"hard"},
-{en:"Independence",ar:["استقلال"],pron:"/ˌɪndɪˈpendəns/",cat:"الحياة",level:"hard"},
-{en:"Solution",ar:["حل"],pron:"/səˈluːʃən/",cat:"التعلم",level:"medium"},
-{en:"Prevent",ar:["يمنع","يحول دون"],pron:"/prɪˈvent/",cat:"أفعال",level:"medium"},
-{en:"Opportunity",ar:["فرصة"],pron:"/ˌɑːpərˈtuːnəti/",cat:"العمل",level:"medium"},
-{en:"Strength",ar:["قوة"],pron:"/streŋθ/",cat:"صفات",level:"hard"},
-{en:"Patience",ar:["صبر"],pron:"/ˈpeɪʃəns/",cat:"صفات",level:"medium"}
+{en:"Welcome",ar:["مرحبا","أهلا","أهلاً"],pron:"/ˈwelkəm/",cat:"Greetings",level:"easy"},
+{en:"Beautiful",ar:["جميل","جميلة"],pron:"/ˈbjuːtɪfəl/",cat:"Adjectives",level:"easy"},
+{en:"Book",ar:["كتاب"],pron:"/bʊk/",cat:"Study",level:"easy"},
+{en:"Water",ar:["ماء"],pron:"/ˈwɔːtər/",cat:"Food",level:"easy"},
+{en:"Friend",ar:["صديق","صديقة"],pron:"/frend/",cat:"People",level:"easy"},
+{en:"Family",ar:["عائلة","أسرة"],pron:"/ˈfæməli/",cat:"People",level:"easy"},
+{en:"House",ar:["منزل","بيت"],pron:"/haʊs/",cat:"Home",level:"easy"},
+{en:"Window",ar:["نافذة","شباك"],pron:"/ˈwɪndoʊ/",cat:"Home",level:"easy"},
+{en:"Morning",ar:["صباح"],pron:"/ˈmɔːrnɪŋ/",cat:"Time",level:"easy"},
+{en:"Happy",ar:["سعيد","سعيدة","فرحان"],pron:"/ˈhæpi/",cat:"Feelings",level:"easy"},
+{en:"Learn",ar:["يتعلم","تعلم"],pron:"/lɜːrn/",cat:"Study",level:"easy"},
+{en:"Travel",ar:["يسافر","سفر"],pron:"/ˈtrævəl/",cat:"Travel",level:"easy"},
+{en:"Computer",ar:["حاسوب","كمبيوتر"],pron:"/kəmˈpjuːtər/",cat:"Technology",level:"easy"},
+{en:"Food",ar:["طعام","أكل"],pron:"/fuːd/",cat:"Food",level:"easy"},
+{en:"Work",ar:["عمل","يعمل"],pron:"/wɜːrk/",cat:"Work",level:"easy"},
+{en:"Quickly",ar:["بسرعة"],pron:"/ˈkwɪkli/",cat:"Adverbs",level:"medium"},
+{en:"Improve",ar:["يحسن","يطور","تحسين","تطوير"],pron:"/ɪmˈpruːv/",cat:"Learning",level:"medium"},
+{en:"Journey",ar:["رحلة"],pron:"/ˈdʒɜːrni/",cat:"Travel",level:"medium"},
+{en:"Choose",ar:["يختار","اختر","اختيار"],pron:"/tʃuːz/",cat:"Verbs",level:"medium"},
+{en:"Knowledge",ar:["معرفة","علم"],pron:"/ˈnɑːlɪdʒ/",cat:"Learning",level:"medium"},
+{en:"Environment",ar:["بيئة"],pron:"/ɪnˈvaɪrənmənt/",cat:"Nature",level:"medium"},
+{en:"Opportunity",ar:["فرصة"],pron:"/ˌɑːpərˈtuːnəti/",cat:"Work",level:"medium"},
+{en:"Reliable",ar:["موثوق","جدير بالثقة"],pron:"/rɪˈlaɪəbəl/",cat:"Adjectives",level:"medium"},
+{en:"Develop",ar:["يطور","ينمي","تطوير"],pron:"/dɪˈveləp/",cat:"Learning",level:"medium"},
+{en:"Therefore",ar:["لذلك","وبالتالي"],pron:"/ˈðerfɔːr/",cat:"Connectors",level:"medium"},
+{en:"Achievement",ar:["إنجاز"],pron:"/əˈtʃiːvmənt/",cat:"Work",level:"hard"},
+{en:"Sustainable",ar:["مستدام"],pron:"/səˈsteɪnəbəl/",cat:"Nature",level:"hard"},
+{en:"Curiosity",ar:["فضول"],pron:"/ˌkjʊriˈɑːsəti/",cat:"Adjectives",level:"hard"},
+{en:"Efficient",ar:["فعال","كفء","فعّال"],pron:"/ɪˈfɪʃənt/",cat:"Work",level:"hard"},
+{en:"Consequently",ar:["وبالتالي","نتيجة لذلك"],pron:"/ˈkɑːnsɪkwəntli/",cat:"Connectors",level:"hard"},
+{en:"Accurate",ar:["دقيق","صحيح"],pron:"/ˈækjərət/",cat:"Adjectives",level:"hard"},
+{en:"Improve",ar:["يحسّن","يطوّر"],pron:"/ɪmˈpruːv/",cat:"Verbs",level:"hard"},
+{en:"Challenge",ar:["تحد","تحدي","تحدٍّ"],pron:"/ˈtʃælɪndʒ/",cat:"Learning",level:"medium"},
+{en:"Decision",ar:["قرار"],pron:"/dɪˈsɪʒən/",cat:"Life",level:"medium"},
+{en:"Confidence",ar:["ثقة"],pron:"/ˈkɑːnfɪdəns/",cat:"Feelings",level:"medium"},
+{en:"Electricity",ar:["كهرباء"],pron:"/ɪˌlekˈtrɪsəti/",cat:"Technology",level:"medium"},
+{en:"Energy",ar:["طاقة"],pron:"/ˈenərdʒi/",cat:"Technology",level:"easy"},
+{en:"Device",ar:["جهاز"],pron:"/dɪˈvaɪs/",cat:"Technology",level:"easy"},
+{en:"Repair",ar:["يصلح","إصلاح"],pron:"/rɪˈper/",cat:"Verbs",level:"medium"},
+{en:"Discover",ar:["يكتشف","اكتشاف"],pron:"/dɪˈskʌvər/",cat:"Verbs",level:"medium"},
+{en:"Carefully",ar:["بعناية","بحذر"],pron:"/ˈkerfəli/",cat:"Adverbs",level:"medium"},
+{en:"Experience",ar:["تجربة","خبرة"],pron:"/ɪkˈspɪriəns/",cat:"Life",level:"medium"},
+{en:"Purpose",ar:["هدف","غرض"],pron:"/ˈpɜːrpəs/",cat:"Life",level:"medium"},
+{en:"Responsibility",ar:["مسؤولية"],pron:"/rɪˌspɑːnsəˈbɪləti/",cat:"Life",level:"hard"},
+{en:"Independence",ar:["استقلال"],pron:"/ˌɪndɪˈpendəns/",cat:"Life",level:"hard"},
+{en:"Solution",ar:["حل"],pron:"/səˈluːʃən/",cat:"Learning",level:"medium"},
+{en:"Prevent",ar:["يمنع","يحول دون"],pron:"/prɪˈvent/",cat:"Verbs",level:"medium"},
+{en:"Opportunity",ar:["فرصة"],pron:"/ˌɑːpərˈtuːnəti/",cat:"Work",level:"medium"},
+{en:"Strength",ar:["قوة"],pron:"/streŋθ/",cat:"Adjectives",level:"hard"},
+{en:"Patience",ar:["صبر"],pron:"/ˈpeɪʃəns/",cat:"Adjectives",level:"medium"}
 ];
 const $=id=>document.getElementById(id);
 const load=(k,d)=>{try{return JSON.parse(localStorage.getItem("wct_"+k))??d}catch{return d}};
@@ -140,15 +147,15 @@ function persist(){localStorage.setItem("wct_data",JSON.stringify(data));localSt
 function norm(s){return (s||"").toString().trim().replace(/[ًٌٍَُِّْـ]/g,"").replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/\s+/g," ").toLowerCase()}
 function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function renderStats(){$("score").textContent=data.score;$("correctCount").textContent=data.correct;$("streak").textContent=data.streak+" 🔥"}
-function makeDeck(){let pool=WORDS.filter(w=>settings.level==="all"||w.level===settings.level);if(reviewMode){pool=pool.filter(w=>data.saved.includes(w.en));if(!pool.length){toast("لا توجد كلمات محفوظة للمراجعة بعد.");reviewMode=false;pool=WORDS.filter(w=>settings.level==="all"||w.level===settings.level)}}deck=shuffle([...pool]);index=0}
+function makeDeck(){let pool=WORDS.filter(w=>settings.level==="all"||w.level===settings.level);if(reviewMode){pool=pool.filter(w=>data.saved.includes(w.en));if(!pool.length){toast("No saved words to review yet.");reviewMode=false;pool=WORDS.filter(w=>settings.level==="all"||w.level===settings.level)}}deck=shuffle([...pool]);index=0}
 function renderWord(){
  if(!deck.length)makeDeck();
- if(index>=deck.length){deck=shuffle([...deck]);index=0;toast("أكملت هذه الجولة! أحسنت 🎉")}
+ if(index>=deck.length){deck=shuffle([...deck]);index=0;toast("Round complete! Well done 🎉")}
  current=deck[index];hintUsed=false;locked=false;
  $("englishWord").textContent=current.en;
  $("translationReveal").className="translation-reveal";$("fullTranslation").textContent="";
  $("categoryPill").textContent=current.cat;
- $("roundLabel").textContent=`الكلمة ${index+1} / ${deck.length}`;
+ $("roundLabel").textContent=`Word ${index+1} / ${deck.length}`;
  $("progress").style.width=`${((index+1)/deck.length)*100}%`;
  $("letterBoxes").innerHTML="";
  const chars=[...current.ar[0]];
@@ -159,7 +166,7 @@ function renderWord(){
      const input=document.createElement("input");
      input.className="letter-box";input.type="text";input.maxLength=1;input.autocomplete="off";
      input.autocapitalize="off";input.spellcheck=false;input.inputMode="text";
-     input.setAttribute("aria-label",`الحرف ${i+1}`);
+     input.setAttribute("aria-label",`Letter ${i+1}`);
      input.dataset.answerIndex=String(i);
      input.addEventListener("input",()=>{
        const val=[...input.value].slice(-1)[0]||"";
@@ -179,7 +186,7 @@ function renderWord(){
  $("checkBtn").disabled=false;
  $("feedback").textContent="";$("feedback").className="feedback";
  $("hintBox").className="hint-box";$("hintBox").textContent="";
- $("saveBtn").textContent=data.saved.includes(current.en)?"★ محفوظة":"☆ احفظ الكلمة";
+ $("saveBtn").textContent=data.saved.includes(current.en)?"★ Saved":"☆ Save Word";
  const first=getBoxes()[0];if(first)first.focus({preventScroll:true});
 }
 function getBoxes(){return [...$("letterBoxes").querySelectorAll(".letter-box")]}
@@ -195,18 +202,18 @@ function next(){index++;renderWord()}
 function check(){
  if(locked)return;
  let val=norm(getAnswer());
- if(!val){$("feedback").textContent="املأ مربعات الحروف أولًا.";return}
+ if(!val){$("feedback").textContent="Fill in the letter boxes first.";return}
  let ok=current.ar.some(a=>norm(a)===val);
  if(ok){
    locked=true;data.score+=hintUsed?5:10;data.correct++;data.streak++;data.best=Math.max(data.best,data.streak);
    if(!data.answered.includes(current.en))data.answered.push(current.en);
    if(!data.saved.includes(current.en))data.saved.push(current.en);
-   persist();$("feedback").textContent="إجابة صحيحة! أحسنت 🎉"+(hintUsed?" (+5 نقاط)":" (+10 نقاط)");
+   persist();$("feedback").textContent="Correct! Well done 🎉"+(hintUsed?" (+5 نقاط)":" (+10 نقاط)");
    $("feedback").className="feedback good";$("fullTranslation").textContent=current.ar[0];$("translationReveal").className="translation-reveal show";getBoxes().forEach(b=>b.disabled=true);
-   $("checkBtn").disabled=true;$("saveBtn").textContent="★ محفوظة";setTimeout(next,1100);
+   $("checkBtn").disabled=true;$("saveBtn").textContent="★ Saved";setTimeout(next,1100);
  }else{
    data.streak=0;data.missed.unshift(current.en);data.missed=[...new Set(data.missed)].slice(0,100);persist();
-   $("feedback").textContent="ليست صحيحة تمامًا، حاول مرة أخرى.";
+   $("feedback").textContent="Not quite right. Try again.";
    $("feedback").className="feedback bad";
    const first=getBoxes().find(b=>!b.value);if(first)first.focus();
  }
@@ -227,9 +234,9 @@ function hint(){
 }
 function toast(msg){$("toast").textContent=msg;$("toast").classList.add("show");clearTimeout(toast.t);toast.t=setTimeout(()=>$("toast").classList.remove("show"),2200)}
 function showScreen(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("active",s.id===id));document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active",b.dataset.screen===id));if(id==="wallet")renderWallet();if(id==="settings")renderSettings()}
-function renderWallet(){let q=norm($("searchWords").value),f=$("walletFilter").value;let list=WORDS.filter(w=>{let saved=data.saved.includes(w.en),correct=data.answered.includes(w.en);return (!q||norm(w.en).includes(q)||w.ar.some(a=>norm(a).includes(q)))&&(f==="all"||f==="saved"&&saved||f==="correct"&&correct)});$("wordList").innerHTML="";if(!list.length){$("wordList").innerHTML='<div class="empty">لا توجد كلمات مطابقة بعد.</div>';return}list.forEach(w=>{let saved=data.saved.includes(w.en),correct=data.answered.includes(w.en),div=document.createElement("div");div.className="item";let left=document.createElement("div"),strong=document.createElement("strong"),small=document.createElement("small");strong.textContent=w.en;small.textContent=w.ar.join(" / ")+(correct?" · ✓ صحيحة":"");left.append(strong,small);let b=document.createElement("button");b.className="small-btn";b.textContent=saved?"★":"☆";b.title=saved?"إزالة من المحفوظات":"حفظ";b.onclick=()=>{data.saved=saved?data.saved.filter(x=>x!==w.en):[...data.saved,w.en];persist();renderWallet()};div.append(left,b);$("wordList").append(div)})}
+function renderWallet(){let q=norm($("searchWords").value),f=$("walletFilter").value;let list=WORDS.filter(w=>{let saved=data.saved.includes(w.en),correct=data.answered.includes(w.en);return (!q||norm(w.en).includes(q)||w.ar.some(a=>norm(a).includes(q)))&&(f==="all"||f==="saved"&&saved||f==="correct"&&correct)});$("wordList").innerHTML="";if(!list.length){$("wordList").innerHTML='<div class="empty">No matching words found.</div>';return}list.forEach(w=>{let saved=data.saved.includes(w.en),correct=data.answered.includes(w.en),div=document.createElement("div");div.className="item";let left=document.createElement("div"),strong=document.createElement("strong"),small=document.createElement("small");strong.textContent=w.en;small.textContent=w.ar.join(" / ")+(correct?" · ✓ Correct":"");left.append(strong,small);let b=document.createElement("button");b.className="small-btn";b.textContent=saved?"★":"☆";b.title=saved?"Remove from saved words":"Save";b.onclick=()=>{data.saved=saved?data.saved.filter(x=>x!==w.en):[...data.saved,w.en];persist();renderWallet()};div.append(left,b);$("wordList").append(div)})}
 function renderSettings(){$("levelSelect").value=settings.level}
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));$("settingsBtn").onclick=()=>showScreen("settings");$("checkBtn").onclick=check;$("hintBtn").onclick=hint;$("skipBtn").onclick=()=>{data.streak=0;persist();next()};$("saveBtn").onclick=()=>{if(data.saved.includes(current.en))data.saved=data.saved.filter(x=>x!==current.en);else data.saved.push(current.en);persist();$("saveBtn").textContent=data.saved.includes(current.en)?"★ محفوظة":"☆ احفظ الكلمة";toast(data.saved.includes(current.en)?"تم حفظ الكلمة":"تمت إزالة الكلمة")};$("searchWords").oninput=renderWallet;$("walletFilter").onchange=renderWallet;$("levelSelect").onchange=e=>{settings.level=e.target.value;persist();reviewMode=false;makeDeck();renderWord();toast("تم تحديث مستوى الكلمات")};$("reviewBtn").onclick=()=>{reviewMode=true;makeDeck();showScreen("game");renderWord();toast("بدأت مراجعة الكلمات المحفوظة")};$("exportBtn").onclick=()=>{let rows=[["English","Arabic","Category","Level","Saved","Correct"],...WORDS.map(w=>[w.en,w.ar.join(" / "),w.cat,w.level,data.saved.includes(w.en)?"yes":"no",data.answered.includes(w.en)?"yes":"no"])];let csv="\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="my-english-arabic-words.csv";a.click();URL.revokeObjectURL(url)};$("resetBtn").onclick=()=>{if(confirm("هل أنت متأكد؟ سيتم حذف النقاط والكلمات المحفوظة والتقدّم من هذا الجهاز.")){data={score:0,correct:0,streak:0,best:0,answered:[],saved:[],missed:[]};persist();makeDeck();renderWord();toast("تمت إعادة ضبط التقدم")}};
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));$("settingsBtn").onclick=()=>showScreen("settings");$("checkBtn").onclick=check;$("hintBtn").onclick=hint;$("skipBtn").onclick=()=>{data.streak=0;persist();next()};$("saveBtn").onclick=()=>{if(data.saved.includes(current.en))data.saved=data.saved.filter(x=>x!==current.en);else data.saved.push(current.en);persist();$("saveBtn").textContent=data.saved.includes(current.en)?"★ Saved":"☆ Save Word";toast(data.saved.includes(current.en)?"Word saved":"Word removed")};$("searchWords").oninput=renderWallet;$("walletFilter").onchange=renderWallet;$("levelSelect").onchange=e=>{settings.level=e.target.value;persist();reviewMode=false;makeDeck();renderWord();toast("Word difficulty updated")};$("reviewBtn").onclick=()=>{reviewMode=true;makeDeck();showScreen("game");renderWord();toast("Started reviewing saved words")};$("exportBtn").onclick=()=>{let rows=[["English","Arabic","Category","Level","Saved","Correct"],...WORDS.map(w=>[w.en,w.ar.join(" / "),w.cat,w.level,data.saved.includes(w.en)?"yes":"no",data.answered.includes(w.en)?"yes":"no"])];let csv="\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n");let blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="my-english-arabic-words.csv";a.click();URL.revokeObjectURL(url)};$("resetBtn").onclick=()=>{if(confirm("Are you sure? This will delete your score, saved words, and progress from this device.")){data={score:0,correct:0,streak:0,best:0,answered:[],saved:[],missed:[]};persist();makeDeck();renderWord();toast("Progress has been reset")}};
 makeDeck();renderStats();renderWord();
 </script>
 </body>
